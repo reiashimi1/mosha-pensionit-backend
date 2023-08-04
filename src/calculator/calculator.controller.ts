@@ -12,8 +12,9 @@ export class CalculatorController {
     @Query('gender') gender: 'male' | 'female',
     @Res() res: Response,
   ) {
-    const result = this.service.calculateRetirementAge(birthday, gender);
-    const response = { data: { result } };
+    const response = {
+      result: this.service.calculateRetirementAge(birthday, gender),
+    };
 
     return res.status(200).json(response);
   }
