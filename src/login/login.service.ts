@@ -12,11 +12,12 @@ export class LoginService {
     // this.getHashedPassword(password).then(
     //   (result) => (hashedPassword = result),
     // );
+    // console.log(hashedPassword);
     if (
       username === 'rizaashimi' &&
       bcrypt.compareSync(
         password,
-        '$2b$08$nMtq/sEwSSajoLTya2Mf8eQ7b7Y3Z0mzQUYG5d56VH5IIBO8ASgoi',
+        '$2b$08$OpgMvfdoA.olpTXjOcHrQeISC/kvrW4v8DDmSFFZHvdpNbGEO3ld6',
       )
     ) {
       return true;
