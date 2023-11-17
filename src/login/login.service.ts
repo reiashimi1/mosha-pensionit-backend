@@ -2,12 +2,18 @@ import { Injectable } from '@nestjs/common';
 const saltRounds = Number(8);
 import * as bcrypt from 'bcrypt';
 
+type LoginType = {
+  isLoggedIn: boolean;
+  firstName?: string;
+  message: string;
+};
+
 @Injectable()
 export class LoginService {
   private email: string;
   private password: string;
 
-  login = (username, password): boolean => {
+  login = (username, password): LoginType => {
     // let hashedPassword;
     // this.getHashedPassword(password).then(
     //   (result) => (hashedPassword = result),
@@ -20,9 +26,9 @@ export class LoginService {
         '$2b$08$OpgMvfdoA.olpTXjOcHrQeISC/kvrW4v8DDmSFFZHvdpNbGEO3ld6',
       )
     ) {
-      return true;
+      return { isLoggedIn: true, firstName: "Riza", message: 'Logged in successfully' };
     }
-    return false;
+    return { isLoggedIn: false, message: 'Kredencialet jane te gabuara' };
   };
 
   private getHashedPassword = async (password: string): Promise<string> => {

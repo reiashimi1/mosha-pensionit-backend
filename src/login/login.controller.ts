@@ -13,9 +13,11 @@ export class LoginController {
     @Res() res: Response,
   ) {
     const response = {
-      result: { loggedIn: this.service.login(username, password) },
+      result: this.service.login(username, password),
     };
 
-    return res.status(200).json(response);
+    return response.result.isLoggedIn
+      ? res.status(200).json(response)
+      : res.status(400).json(response);
   }
 }
