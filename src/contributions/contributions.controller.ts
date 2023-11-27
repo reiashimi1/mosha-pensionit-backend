@@ -9,11 +9,12 @@ export class ContributionsController {
 
   @Get()
   calculateRetirementAge(
-    @Query('allYearsData') allYearsData: Contribution[],
+    @Query('allYearsData') allYearsData: [],
     @Res() res: Response,
   ) {
+    const contributions = Object.values(allYearsData);
     const response = {
-      result: this.service.getContributionsResult(allYearsData),
+      result: this.service.getContributionsResult(contributions),
     };
 
     return res.status(200).json(response);
