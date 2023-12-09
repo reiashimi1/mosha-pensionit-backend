@@ -12,3 +12,8 @@ export type ContributionResponseType = {
   fullMonths: number;
   fullDays: number;
 };
+
+export type StateWork = {
+  startDate: string;
+  endDate: string;
+};
