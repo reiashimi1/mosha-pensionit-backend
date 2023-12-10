@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Contribution, ContributionResponseType, StateWork } from './types';
 import { Gender } from './Gender';
 import moment from 'moment';
+import { GenderService } from './gender-service.service';
+import { convertStateDaysToContributionsDays } from '../helpers';
 
 @Injectable()
 export class ContributionsService {
@@ -10,17 +12,13 @@ export class ContributionsService {
   private fullDays = 0;
   private maxYearDays;
 
+  constructor(private readonly genderService: GenderService) {}
+
   getContributionsResult(
     contributions: Contribution[],
     gender: Gender,
   ): ContributionResponseType {
-    if (gender === Gender.Male) {
-      this.maxYearDays = 280;
-    } else if (gender === Gender.Female) {
-      this.maxYearDays = 230;
-    } else {
-      throw new Error('Invalid gender');
-    }
+    this.maxYearDays = this.genderService.getMaxYearPlannedDays(gender);
 
     let totalDays = 0;
     contributions.forEach((contribution) => {
@@ -50,8 +48,11 @@ export class ContributionsService {
   getYearsWithStateWorkConfigs(
     contributions: Contribution[],
     stateWorkDays: StateWork[],
+    gender: Gender,
   ): Contribution[] {
     const allStateDays = [];
+    this.maxYearDays = this.genderService.getMaxYearPlannedDays(gender);
+
     stateWorkDays.forEach((config) => {
       const startDate = moment(config.startDate, 'YYYY-MM-DD');
       const endDate = moment(config.endDate, 'YYYY-MM-DD');
@@ -65,7 +66,14 @@ export class ContributionsService {
         const daysInYear = endDate.isBefore(yearEnd)
           ? endDate.diff(moment.max(startDate, yearStart), 'days')
           : yearEnd.diff(moment.max(startDate, yearStart), 'days');
-        allStateDays.push({ year: year.toString(), days: daysInYear });
+        const finalDays = Math.floor(
+          convertStateDaysToContributionsDays(
+            year,
+            daysInYear,
+            this.maxYearDays,
+          ),
+        );
+        allStateDays.push({ year: year.toString(), days: finalDays });
       }
     });
 
@@ -79,6 +87,14 @@ export class ContributionsService {
             updatedPlannedDays > 0 ? updatedPlannedDays.toString() : '0',
         };
       }
+      // } else {
+      //   const updatedPlannedDays =
+      //     this.genderService.getMaxYearPlannedDays(gender);
+      //   return {
+      //     ...data,
+      //     plannedDays: updatedPlannedDays,
+      //   };
+      // }
       return data;
     });
     return updatedAllYearsData;

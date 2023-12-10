@@ -26,6 +26,7 @@ export class ContributionsController {
   calculateStateDays(
     @Query('allYearsData') allYearsData: [],
     @Query('stateWorkConfigs') stateWorkConfigs: [],
+    @Query('gender') gender: Gender,
     @Res() res: Response,
   ) {
     const contributions = Object.values(allYearsData);
@@ -34,6 +35,7 @@ export class ContributionsController {
       result: this.service.getYearsWithStateWorkConfigs(
         contributions,
         stateWorkDays,
+        gender,
       ),
     };
 
