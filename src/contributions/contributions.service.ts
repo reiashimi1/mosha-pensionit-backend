@@ -69,7 +69,7 @@ export class ContributionsService {
         const finalDays = Math.floor(
           convertStateDaysToContributionsDays(
             year,
-            daysInYear,
+            daysInYear + 1,
             this.maxYearDays,
           ),
         );
