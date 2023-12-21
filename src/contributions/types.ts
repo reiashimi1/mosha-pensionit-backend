@@ -2,7 +2,7 @@ export type Contribution = {
   year: string;
   plannedDays: string;
   completedDays: string;
-  // isFullYear: boolean;
+  daysToSubtract?: number;
   daysToCalculate: string;
   isYearCalculated: boolean;
 };

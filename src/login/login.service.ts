@@ -23,10 +23,14 @@ export class LoginService {
       username === 'rizaashimi' &&
       bcrypt.compareSync(
         password,
-        '$2b$08$OpgMvfdoA.olpTXjOcHrQeISC/kvrW4v8DDmSFFZHvdpNbGEO3ld6',
+        '$2b$08$T/G8zxsOovKstleQJtip9OQ2hOeLtdUbcRmWeTyFvg/vmtYjZCErG',
       )
     ) {
-      return { isLoggedIn: true, firstName: "Riza", message: 'Logged in successfully' };
+      return {
+        isLoggedIn: true,
+        firstName: 'Riza',
+        message: 'Logged in successfully',
+      };
     }
     return { isLoggedIn: false, message: 'Kredencialet jane te gabuara' };
   };
