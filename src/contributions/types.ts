@@ -5,6 +5,7 @@ export type Contribution = {
   daysToSubtract?: number;
   daysToCalculate: string;
   isYearCalculated: boolean;
+  stateWorkDays?: string;
 };
 
 export type ContributionResponseType = {

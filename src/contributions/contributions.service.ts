@@ -66,10 +66,10 @@ export class ContributionsService {
         const daysInYear = endDate.isBefore(yearEnd)
           ? endDate.diff(moment.max(startDate, yearStart), 'days')
           : yearEnd.diff(moment.max(startDate, yearStart), 'days');
-        const finalDays = Math.floor(
+        const finalDays = Math.ceil(
           convertStateDaysToContributionsDays(
             year,
-            daysInYear + 1,
+            daysInYear + 2,
             this.maxYearDays,
           ),
         );
@@ -83,6 +83,7 @@ export class ContributionsService {
         const updatedPlannedDays = Number(data.plannedDays) - matchingYear.days;
         return {
           ...data,
+          stateWorkDays: matchingYear.days.toString(),
           plannedDays:
             updatedPlannedDays > 0 ? updatedPlannedDays.toString() : '0',
         };
@@ -98,5 +99,36 @@ export class ContributionsService {
       return data;
     });
     return updatedAllYearsData;
+  }
+
+  public calculateStateDaysResult(
+    stateWorkDays: StateWork[],
+  ): ContributionResponseType {
+    let totalDays = 0;
+    stateWorkDays.forEach((stateConfig) => {
+      if (!!stateConfig.startDate && !!stateConfig.endDate) {
+        const startDate = moment(stateConfig.startDate, 'YYYY-MM-DD');
+        const endDate = moment(stateConfig.endDate, 'YYYY-MM-DD');
+        const difference = endDate.diff(startDate, 'days');
+        totalDays += Number(difference);
+      }
+    });
+    // take the loop above, add the totaldays to the startDate, until the endDate or the end of year,
+    // and then get the year/months/day from it
+
+    const duration = moment.duration(totalDays, 'days');
+
+    const years = Math.floor(duration.asYears());
+    duration.subtract(moment.duration(years, 'years'));
+
+    const months = Math.floor(duration.asMonths());
+    duration.subtract(moment.duration(months, 'months'));
+
+    const days = duration.days();
+    return {
+      fullYears: Number(years),
+      fullMonths: Number(months),
+      fullDays: Number(days),
+    };
   }
 }

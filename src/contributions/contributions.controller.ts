@@ -1,7 +1,6 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { ContributionsService } from './contributions.service';
 import { Response } from 'express';
-import { Contribution, StateWork } from './types';
 import { Gender } from './Gender';
 
 @Controller('contributions')
@@ -32,11 +31,14 @@ export class ContributionsController {
     const contributions = Object.values(allYearsData);
     const stateWorkDays = Object.values(stateWorkConfigs);
     const response = {
-      result: this.service.getYearsWithStateWorkConfigs(
-        contributions,
-        stateWorkDays,
-        gender,
-      ),
+      result: {
+        yearsWithStateWorkConfigs: this.service.getYearsWithStateWorkConfigs(
+          contributions,
+          stateWorkDays,
+          gender,
+        ),
+        stateDays: this.service.calculateStateDaysResult(stateWorkDays),
+      },
     };
 
     return res.status(200).json(response);
