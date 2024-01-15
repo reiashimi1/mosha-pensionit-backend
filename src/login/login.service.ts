@@ -6,6 +6,7 @@ type LoginType = {
   isLoggedIn: boolean;
   firstName?: string;
   message: string;
+  token?: string;
 };
 
 @Injectable()
@@ -30,6 +31,7 @@ export class LoginService {
         isLoggedIn: true,
         firstName: 'Riza',
         message: 'Logged in successfully',
+        token: 'r$2b$08$T/G8zxsOovKstleQJtip9OQ2hOeLtdUbcRmWeTyFvg/vmtYjZCErGa',
       };
     }
     return { isLoggedIn: false, message: 'Kredencialet jane te gabuara' };
